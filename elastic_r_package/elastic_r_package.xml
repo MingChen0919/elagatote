@@ -3,17 +3,92 @@
         <import>elastic_r_package_wrappers_macros.xml</import>
         <import>elastic_r_functions_macros.xml</import>
     </macros>
-    <description></description>
+    <expand macro="tool_description" />
     <requirements>
         <expand macro="rmarkdown_requirements" />
     </requirements>
-    <expand macro="stdio" />
-    <expand macro="shell_command" />
+    <stdio>
+        <regex match="XXX" source="stderr" level="warning"
+               description="Check the tool log output file for more details."/>
+    </stdio>
+    <command><![CDATA[
+
+        ############ 1. create a directory to store all files
+        mkdir -p $report.files_path &&
+
+
+        ############ 2. save the tool installation directory to an environment variable
+        export TOOL_INSTALL_DIR='${__tool_directory__}' &&
+
+
+        ############ 3. save user inputs into arguments.txt
+
+        ############    3.1 table header
+        echo 'row_type|function_name|argument_name|argument_value|argument_value_type|operator' > $report.files_path/arguments.txt &&
+
+
+        ############    3.2 loop through function component repeat
+        #for fun_component in $function_components:
+            echo 'func|$fun_component.function_name||||' >> $report.files_path/arguments.txt &&
+
+            Rscript -e 'library(tidyverse); help($fun_component.function_name)' >> $report.files_path/$fun_component.function_name-help.txt &&
+
+            #for argument in $fun_component.function_arguments:
+                echo 'argument||$argument.argument_type.argument_name|$argument.argument_type.argument_value|$argument.argument_type.argument_type_selector|' >> $report.files_path/arguments.txt &&
+            #end for
+            echo 'operator|||||$fun_component.operator' >> $report.files_path/arguments.txt &&
+        #end for
+
+        ############ output_set
+        ## '$report'
+        ## '$report.files_path'
+        ## '$tool_help_doc'
+        ## '$tool_log'
+        #######################
+        export REPORT='$report' &&
+        export REPORT_FILES_PATH='$report.files_path' &&
+        export TOOL_RDATA_OUTPUT='$tool_rdata_output' &&
+        export TOOL_LOG='$tool_log' &&
+
+
+        ############ run render R script to render R markdowns
+        Rscript '${__tool_directory__}/elastic_r_package_render.R'
+
+        ]]></command>
     <inputs>
-        <expand macro="function_components" />
+        <repeat name="function_components" title="Call a function" min="1" default="1">
+            <param type="select" name="function_name" multiple="false" label="==== Call function ====">
+                <expand macro="r_functions" />
+            </param>
+            <repeat name="function_arguments" title="argument name/value pairs" min="0" default="0">
+                <conditional name="argument_type">
+                    <param name="argument_type_selector" type="select" label="Argument type">
+                        <option value="value" selected="false">user input value</option>
+                        <option value="rdata" selected="false">value from RData output</option>
+                    </param>
+                    <when value="value">
+                        <param type="text" name="argument_name" label="argument name"  />
+                        <param type="text" name="argument_value"  label="argument value"  />
+                    </when>
+                    <when value="rdata">
+                        <param type="text" name="argument_name" label="argument name"  />
+                        <param type="data" format="rdata" name="argument_value" optional="false" label="RData output"  />
+                    </when>
+                </conditional>
+            </repeat>
+            <param type="select" name="operator" label="connect to next function">
+                <sanitizer>
+                    <valid initial="string.printable"/>
+                </sanitizer>
+                <option value="%>%" selected="true">pipe (%>%)</option>
+                <option value="+" selected="false">plus (+)</option>
+            </param>
+        </repeat>
     </inputs>
     <outputs>
-        <expand macro="output_set" />
+        <data format="html" name="report" label="${tool.name} report"/>
+        <data format="rdata" name="tool_rdata_output" label="${tool.name} RData output ${on_string}"/>
+        <data format="txt" name="tool_log" label="${tool.name} log" />
     </outputs>
     <citations>
         <expand macro="citations" />
