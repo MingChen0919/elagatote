@@ -42,7 +42,6 @@
         ############ output_set
         ## '$report'
         ## '$report.files_path'
-        ## '$tool_help_doc'
         ## '$tool_log'
         #######################
         export REPORT='$report' &&
