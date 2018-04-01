@@ -2,8 +2,8 @@
 name: tool_name
 owner: mingchen0919
 description: description for an elastic Galaxy tool
-long_description: ""
-remote_repository_url: ""
+long_description:
+remote_repository_url:
 type: unrestricted
 categories:
   - ZZ-test1
