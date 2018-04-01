@@ -1,0 +1,110 @@
+---
+title: 'Tool Report'
+output: html_document
+---
+
+<style>
+pre code, pre, code {
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+## User input
+
+```{r, echo=FALSE}
+knitr::kable(arguments)
+```
+
+
+```{r, echo=FALSE}
+# each tool execution runs one or multiple chained functions but generate only one single object.
+# we save this object to an rdata file and output this file to galaxy history so that it can be used by other tools
+# we can use this rdata output file's dataset id as the variable name of the saved object.
+job_script_path = paste0(Sys.getenv('REPORT_FILES_PATH'), '/job-script.R')
+tool_rdata_output = Sys.getenv('TOOL_RDATA_OUTPUT')
+dataset_id = tail(strsplit(tool_rdata_output, '/')[[1]], 1)
+dataset_num = gsub("(.+_)([0-9]+)\\.dat", "\\2", dataset_id)
+rdata_id = paste0('rdata_', dataset_num)
+
+## build script
+# the first line of the job script is 'rdata_NUM = ', where 'NUM' is the dataset number of the output rdata.
+write(paste0(rdata_id, ' = '), file = job_script_path)
+# loop through argument data frame to build up the job script.
+for (i in 1: (nrow(arguments)-1)) {
+  row_type = arguments[i, 'row_type']
+  switch (row_type,
+    # if it's a function row, the line has format 'function_name('
+    func = write(paste0(arguments[i, 'function_name'], '('), 
+                 file = job_script_path, 
+                 append = TRUE ),
+    
+    
+    argument = {
+      # if it's an argument row and the next row is not an operator row,
+      # the line has format '    argument_name=argument_value,'
+      if (arguments[i+1, 'operator'] == "") {
+        write(paste0('    ', arguments[i, 'argument_name'], '=', arguments[i, 'argument_value'], ','),
+              file = job_script_path,
+              append = TRUE )
+      } else {
+        # if it's an argument row and the next row IS an operator row,
+        # the line has format '    argument_name=argument_value'. note that there is not comma at the end.
+        write(paste0('    ', arguments[i, 'argument_name'], '=', arguments[i, 'argument_value']),
+              file = job_script_path,
+              append = TRUE )
+      }
+    },
+    
+    # if it is an operator row, the line has format ')  operator'
+    operator =  write(paste0(')  ', arguments[i, 'operator']), 
+                      file = job_script_path, 
+                      append = TRUE )
+  )
+}
+
+# the last line is missing a ')'
+write(')', file = job_script_path, append = TRUE)
+```
+
+
+```{bash, 'display script', results='asis', echo=FALSE}
+echo '## Job script'
+echo ''
+echo ''
+echo '```r'
+cat ${REPORT_FILES_PATH}/job-script.R
+echo '```'
+```
+
+
+## Result
+
+```{r, 'run job script', echo=FALSE}
+source(job_script_path)
+# display result.
+eval(parse(text = rdata_id))
+```
+
+
+```{r, 'display output directory contents', results='asis', echo=FALSE}
+## after the job is done, we list all files from the output directory.
+## full relative path to the output directory needs to be displayed.
+
+cat('##All output files')
+cat('\n\n')
+all_files = list.files(path = Sys.getenv('REPORT_FILES_PATH'), 
+                       full.names = TRUE, 
+                       recursive = TRUE)
+
+for (f in sub(Sys.getenv('REPORT_FILES_PATH'), '.', all_files) ) {
+  cat('* [', f, '](', f, ')\n')
+}
+cat('\n')
+```

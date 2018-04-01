@@ -1,0 +1,30 @@
+<macros>
+
+    <!--tool requirements-->
+    <xml name="tool_requirements">
+        <requirement type="package" version="1.15.0.6-0">pandoc</requirement>
+        <requirement type="package" version="1.6">r-rmarkdown</requirement>
+    </xml>
+
+    <!--tool description-->
+    <xml name="tool_description">
+        <description>a elastic Galaxy tool.</description>
+    </xml>
+
+    <!--tool options-->
+    <xml name="tool_options">
+        <option value="tool_command" selected="false">tool command</option>
+    </xml>
+
+    <!--tool help-->
+    <xml name="tool_help">
+        <help><![CDATA[
+            Here is your tool help documentation.
+        ]]></help>
+    </xml>
+
+    <!--tool citations-->
+    <xml name="citations">
+        <citation type="doi"></citation>
+    </xml>
+</macros>
