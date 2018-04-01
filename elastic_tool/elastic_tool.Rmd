@@ -53,7 +53,7 @@ if (nrow(df2) > 0) {
   write(paste0(tool_name, ' \\'), 
         paste0(Sys.getenv('REPORT_FILES_PATH'), '/script.sh'))
   df2 = df[df$type != 'tool_name', ]
-  write(paste(' ', df2$flag, df2$value, '\\', sep = ' '), 
+  write(paste(' ', df2$option, df2$value, '\\', sep = ' '),
         file = paste0(Sys.getenv('REPORT_FILES_PATH'), '/script.sh'), 
         append = TRUE )
   # remember that after writing option/argument lines to the script.sh, the last line
