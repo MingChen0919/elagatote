@@ -1,29 +1,31 @@
 <macros>
 
-    <!--tool requirements-->
+    <!--change tool_id and elastic tool in the first line of elastic_tool.xml with appropriate tool_id and tool_name.-->
+
+    <!--add tool requirements-->
     <xml name="tool_requirements">
         <requirement type="package" version="1.15.0.6-0">pandoc</requirement>
         <requirement type="package" version="1.6">r-rmarkdown</requirement>
     </xml>
 
-    <!--tool description-->
+    <!--add tool description-->
     <xml name="tool_description">
         <description>a elastic Galaxy tool.</description>
     </xml>
 
-    <!--tool options-->
+    <!--add tool options-->
     <xml name="tool_options">
         <option value="tool_command" selected="false">tool command</option>
     </xml>
 
-    <!--tool help-->
+    <!--add tool help-->
     <xml name="tool_help">
         <help><![CDATA[
             Here is your tool help documentation.
         ]]></help>
     </xml>
 
-    <!--tool citations-->
+    <!--add tool citations-->
     <xml name="citations">
         <citation type="bibtex"><![CDATA[
             @article{allaire2016rmarkdown,
