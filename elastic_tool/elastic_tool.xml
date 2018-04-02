@@ -50,8 +50,8 @@
         #end for
 
 
-        ############ option_argument_path_relative_to_a_tool
-        #for i in $option_argument_path_relative_to_a_tool_repeat:
+        ############ option_argument_path_relative_to_other_tool
+        #for i in $option_argument_path_relative_to_other_tool_repeat:
              #set $item = 'path_relative_to_a_tool|' + str($i.option) + "|" + str($i.value) + "|" + str($i.a_tool_output_dir)
              echo '$item' >> $report.files_path/options_and_arguments.txt &&
         #end for
@@ -102,7 +102,7 @@
                 <option value="," selected="false">comma</option>
             </param>
         </repeat>
-        <repeat name="option_argument_path_relative_to_a_tool_repeat"
+        <repeat name="option_argument_path_relative_to_other_tool_repeat"
                 title="DATA PATH: relative to other tool output directory" min="0" default="0">
             <param type="text" name="option" optional="true" label="option"/>
             <param name="a_tool_output_dir" type="data" optional="false" multiple="false"
