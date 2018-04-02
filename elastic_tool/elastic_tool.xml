@@ -58,7 +58,7 @@
 
         ############ option_argument_path_relative_to_this_tool
         #for i in $option_argument_path_relative_to_this_tool_repeat:
-             #set $item = 'path_relative_to_this_tool|' + str($i.option) + "|" + str($i.value) + "|" + str($i.path_type)
+             #set $item = 'path_relative_to_this_tool|' + str($i.option) + "|" +  + $report.files_path + '/' + str($i.value) + "|" + str($i.path_type)
              echo '$item' >> $report.files_path/options_and_arguments.txt &&
         #end for
 
@@ -130,25 +130,6 @@
         <data format="txt" name="tool_log" label="${tool.name} log ${on_string}"/>
     </outputs>
     <citations>
-        <citation type="bibtex"><![CDATA[
-            @article{allaire2016rmarkdown,
-            title={rmarkdown: Dynamic Documents for R, 2016},
-            author={Allaire, J and Cheng, Joe and Xie, Yihui and McPherson, Jonathan and Chang, Winston and Allen, Jeff
-            and Wickham, Hadley and Atkins, Aron and Hyndman, Rob},
-            journal={R package version 0.9},
-            volume={6},
-            year={2016}
-            }
-        ]]></citation>
-        <citation type="bibtex"><![CDATA[
-            @book{xie2015elastic,
-            title={Dynamic Documents with R and knitr},
-            author={Xie, Yihui},
-            volume={29},
-            year={2015},
-            publisher={CRC Press}
-            }
-        ]]></citation>
         <expand macro="citations"/>
     </citations>
 </tool>
