@@ -58,7 +58,7 @@
 
         ############ option_argument_path_relative_to_this_tool
         #for i in $option_argument_path_relative_to_this_tool_repeat:
-             #set $item = 'path_relative_to_this_tool|' + str($i.option) + "|" +  + $report.files_path + '/' + str($i.value) + "|" + str($i.path_type)
+             #set $item = 'path_relative_to_this_tool|' + str($i.option) + "|" + $report.files_path + '/' + str($i.value) + "|" + str($i.path_type)
              echo '$item' >> $report.files_path/options_and_arguments.txt &&
         #end for
 

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(error = TRUE)
 
 ## User input
 
-```{r, 'display user input'}
+```{r, 'display user input', echo=FALSE}
 # get user input and save it into a data frame.
 df = read.table(paste0(Sys.getenv('REPORT_FILES_PATH'), '/options_and_arguments.txt'), 
                 sep = '|', header = TRUE)
