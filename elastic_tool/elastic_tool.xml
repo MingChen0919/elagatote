@@ -103,14 +103,14 @@
             </param>
         </repeat>
         <repeat name="option_argument_path_relative_to_other_tool_repeat"
-                title="DATA PATH: relative to other tool output directory" min="0" default="0">
+                title="PATH: relative to other tool output directory" min="0" default="0">
             <param type="text" name="option" optional="true" label="option"/>
             <param name="a_tool_output_dir" type="data" optional="false" multiple="false"
                    label="a tool output directory"/>
             <param type="text" name="value" optional="true" label="value"/>
         </repeat>
         <repeat name="option_argument_path_relative_to_this_tool_repeat"
-                title="DATA PATH: relative to this tool output directory" min="0" default="0">
+                title="PATH: relative to this tool output directory" min="0" default="0">
             <param type="text" name="option" optional="true" label="option"/>
             <param type="text" name="value" optional="false" label="value"/>
             <param type="select" name="path_type" multiple="false" label="path type">
